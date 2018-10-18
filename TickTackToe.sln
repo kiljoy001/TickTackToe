@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickTackToe", "TickTackToe\TickTackToe.csproj", "{6C878853-93F4-449E-AA94-D2C64A76325E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TickTackToeTests", "TickTackToeTests\TickTackToeTests.csproj", "{9CEC2886-0AB4-46D2-9774-7AFA149FBF72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6C878853-93F4-449E-AA94-D2C64A76325E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C878853-93F4-449E-AA94-D2C64A76325E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C878853-93F4-449E-AA94-D2C64A76325E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CEC2886-0AB4-46D2-9774-7AFA149FBF72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CEC2886-0AB4-46D2-9774-7AFA149FBF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CEC2886-0AB4-46D2-9774-7AFA149FBF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CEC2886-0AB4-46D2-9774-7AFA149FBF72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
