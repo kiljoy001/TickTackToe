@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public interface IGame
 {
     void Start();
@@ -9,16 +11,21 @@ public interface IGame
 
 public interface IGrid
 {
-    bool CheckOpenLocation();
-    void CommitAndUpdateBoard(IGridPoint point);
+    GridPoint[] BoardLocations { get; }
+    bool CheckOpenLocation(IGridPoint point);
+    void CommitAndUpdateBoard(IPlayer player);
     void ClearAll();
-    IPlayer CheckPointOwnerShip();
-    GridPoint[] GridArray();
+    IPlayer CheckPointOwnerShip(GridPoint point);
+    List<IGridPoint> PlayerGridArray(IPlayer player);
 }
 
 public interface IPlayer
 {
-    GridPoint[] PlayerPositions();
+    List<IGridPoint> PlayerPositions();
+    bool IsWinner { get; set; }
+    void AddPosition(IGridPoint point);
+    void AddPosition(IGridPoint[] points);
+    PlayerAssignment Assignment { get; set; }
 }
 
 public interface IGridPoint
@@ -26,5 +33,7 @@ public interface IGridPoint
     Point GetLocation(int y, int x);
     IPlayer Ownership();
     void SetOwnership(IPlayer player);
+    bool Occupied { get; }
+    Point Location { get; }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TickTackToeTests
 {
@@ -14,11 +15,12 @@ namespace TickTackToeTests
             //make players and game
             Player player1 = new Player();
             Player player2 = new Player();
+            Grid grid = new Grid();
 
             //Act
-            Game testGame = new Game(player1, player2);
+            Game testGame = new Game(player1, player2, grid);
             //Assert
-            Assert.AreEqual(typeof(Game), testGame);
+            Assert.IsTrue(testGame is Game);
         }
 
         [TestMethod]
@@ -27,7 +29,8 @@ namespace TickTackToeTests
             //Arrange
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Grid grid = new Grid();
+            Game testGame = new Game(player1, player2, grid);
             //Act
             testGame.DeclareMatchWinner(player1);
             //Assert
@@ -40,7 +43,8 @@ namespace TickTackToeTests
             //Arrange
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Grid grid = new Grid();
+            Game testGame = new Game(player1, player2, grid);
 
             //Act
             testGame.DeclareDraw();
@@ -55,7 +59,8 @@ namespace TickTackToeTests
             //Arrange
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Grid grid = new Grid();
+            Game testGame = new Game(player1, player2, grid);
 
             //Act
             testGame.Stop();
@@ -70,17 +75,19 @@ namespace TickTackToeTests
             //Arrange
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Grid grid = new Grid();
+            Game testGame = new Game(player1, player2, grid);
+            testGame.Start();
             //Not needed yet, but will be needed when implemented:
             //Grid gameGrid = new Grid();
-            GridPoint point = new GridPoint(1,1);
+            
 
             //Act
-            testGame.MakeMove(player1, point);
-            GridPoint[] player1points = player1.PlayerPositions();
+            testGame.MakeMove(player1, grid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1));
+            List<IGridPoint> player1points = player1.PlayerPositions();
             
             //Assert
-            Assert.IsTrue(player1points.Contains(point));
+            Assert.IsTrue(player1points.Count > 0);
         }
 
         /// Grid Tests
@@ -92,8 +99,8 @@ namespace TickTackToeTests
             Grid gameGrid = new Grid();
 
             //Assert
-            Assert.IsTrue(gameGrid.BoardLocations.Length == 8);
-            Assert.AreEqual(typeof(Grid), gameGrid);
+            Assert.IsTrue(gameGrid.BoardLocations.Length == 9);
+            Assert.IsTrue(gameGrid is Grid);
 
         }
 
@@ -101,15 +108,10 @@ namespace TickTackToeTests
         public void Grid_Check_Open_Location_Returns_True()
         {
             //Arrange
-            GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1,3) };
-
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
+            Grid gameGrid = new Grid();
 
             //Act
-            bool result = gameGrid.CheckOpenLocation(new GridPoint(1, 1));
+            bool result = gameGrid.CheckOpenLocation(gameGrid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1));
 
             //Assert
             Assert.IsTrue(result);
@@ -120,21 +122,17 @@ namespace TickTackToeTests
         public void Grid_Commit_Move_And_Update_Board()
         {
             //Arrange
-            GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1, 3) };
-
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
+            Grid gameGrid = new Grid();
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Game testGame = new Game(player1, player2, gameGrid);
+            testGame.Start();
             //Act
-            testGame.MakeMove(player1, new GridPoint(1, 1));
+            testGame.MakeMove(player1, gameGrid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1));
 
             //Assert
-            Assert.IsTrue(gameGrid.BoardLocations.Contains(new GridPoint(1, 1)));
-            Assert.IsTrue(gameGrid.CheckPointOwnerShip(new GridPoint(1,1)) == player1);
+            Assert.IsTrue(player1.PlayerPositions().Count > 0);
+            Assert.IsTrue(gameGrid.CheckPointOwnerShip(gameGrid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1)) == player1);
         }
 
         [TestMethod]
@@ -143,13 +141,10 @@ namespace TickTackToeTests
             //Arrange 
             GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1, 3) };
 
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
+            Grid gameGrid = new Grid();
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Game testGame = new Game(player1, player2, gameGrid);
             //Act
             testGame.MakeMove(player1, new GridPoint(1, 1));
             
@@ -164,53 +159,49 @@ namespace TickTackToeTests
         public void Grid_Check_CheckPointOwnerShip()
         {
             //Arrange
-            GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1, 3) };
-
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
+  
+            Grid gameGrid = new Grid();
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Game testGame = new Game(player1, player2, gameGrid);
+            testGame.Start();
             //Act
-            testGame.MakeMove(player1, new GridPoint(1, 1));
-
-            //Assert
-            Assert.IsTrue(gameGrid.CheckPointOwnerShip(new GridPoint(1, 1)) == player1);
+            testGame.MakeMove(player1, gameGrid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1));
+            foreach(GridPoint point in gameGrid.BoardLocations)
+            {
+                //Assert
+                if (point.Location.horizontal ==1 && point.Location.vertical==1)
+                {
+                    Assert.IsTrue(point.Ownership() == player1);
+                }
+            }
         }
 
         [TestMethod]
         public void Grid_Check_PlayerGridPoints()
         {
             //Arrange
-            GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1, 3) };
-
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
+           
+            Grid gameGrid = new Grid();
             Player player1 = new Player();
             Player player2 = new Player();
-            Game testGame = new Game(player1, player2);
+            Game testGame = new Game(player1, player2,gameGrid);
+            testGame.Start();
+
             //Act
-            testGame.MakeMove(player1, new GridPoint(1, 1));
+            testGame.MakeMove(player1, gameGrid.BoardLocations.FirstOrDefault(gp => gp.Location.horizontal == 1 && gp.Location.vertical == 1));
 
             //Assert
-            Assert.IsTrue(gameGrid.CheckPointOwnerShip(new GridPoint(1, 1)) == player1);
+            Assert.IsTrue(player1.PlayerPositions().Count == 1);
         }
 
         [TestMethod]
         public void Grid_GridArray_Returns_GridPoint_Array()
         {
-            GridPoint[] array = { new GridPoint(1, 1), new GridPoint(1, 2), new GridPoint(1, 3) };
+            Player player1 = new Player();
+            Grid gameGrid = new Grid();
 
-            Grid gameGrid = new Grid()
-            {
-                BoardLocations = array
-            };
-
-            Assert.AreEqual(typeof(GridPoint[]), gameGrid.GridArray());
+            Assert.IsTrue(gameGrid.PlayerGridArray(player1) is List<IGridPoint>);
         }
 
         [TestMethod]
@@ -228,7 +219,7 @@ namespace TickTackToeTests
         {
             GridPoint gp = new GridPoint(1, 1);
             var result = gp.GetLocation(1, 1);
-            Assert.AreEqual(typeof(Point), result);
+            Assert.IsTrue(result is Point);
         }
 
         [TestMethod]
