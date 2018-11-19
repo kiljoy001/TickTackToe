@@ -9,6 +9,8 @@ public class Game : IGame
     public GameStates States { get; set; }
     private Grid GameGrid;
     public TurnStates TState { get; private set; }
+    public IPlayer Player1 { get { return player1; } }
+    public IPlayer Player2 { get { return player2; } }
 
     public Game(IPlayer p1, IPlayer p2, Grid ggrid)
     {
@@ -60,7 +62,17 @@ public class Game : IGame
 
 public class Grid: IGrid
 {
-    public Grid()
+
+    private List<GridPoint> Row1;
+    private List<GridPoint> Row2;
+    private List<GridPoint> Row3;
+    private List<GridPoint> Column1;
+    private List<GridPoint> Column2;
+    private List<GridPoint> Column3;
+    private List<GridPoint> Diag1;
+    private List<GridPoint> Diag2;
+
+public Grid()
     {
         var p11 = new GridPoint(1, 1);
         var p12 = new GridPoint(1, 2);
@@ -72,7 +84,15 @@ public class Grid: IGrid
         var p32 = new GridPoint(3, 2);
         var p33 = new GridPoint(3, 3);
         BoardLocations = new GridPoint[9] {p11, p12, p13, p21, p22, p23, p31, p32, p33};
-    }
+        List<GridPoint> Row1 = new List<GridPoint> {p11, p12, p13 };
+        List<GridPoint> Row2 = new List<GridPoint> {p21, p22, p23 };
+        List<GridPoint> Row3 = new List<GridPoint> { p31,p32,p33};
+        List<GridPoint> Column1 = new List<GridPoint> {p11, p21, p31 };
+        List<GridPoint> Column2 = new List<GridPoint> {p12,p22,p32 };
+        List<GridPoint> Column3 = new List<GridPoint> {p13,p23,p33 };
+        List<GridPoint> Diag1 = new List<GridPoint> { p11,p22, p33};
+        List<GridPoint> Diag2 = new List<GridPoint> { p13, p22, p31};
+}
     public GridPoint[] BoardLocations { get; private set; }
     public void CommitAndUpdateBoard(IPlayer players)
     {
@@ -168,6 +188,7 @@ public class Player : IPlayer
     }
 }
 
+[Serializable]
 public class GridPoint: IGridPoint
 {
     private Point location;
